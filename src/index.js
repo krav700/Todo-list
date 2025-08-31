@@ -1,6 +1,6 @@
 import "./styles.css"
-import { createToDo } from "./todos.js";
-import { addNewProject } from "./projects.js";
+import { createToDo, addDialogAddTodo, getProjectName } from "./todos.js";
+import { addNewProject, addDialogAddProject, addProjectButtonFunk, addProjectButton } from "./projects.js";
 
 window.createToDo = createToDo;
 window.addNewProject = addNewProject;
@@ -9,24 +9,36 @@ export let currentArray = {
     default: [],
 };
 
-export function getUserInput() {
+const getUserInput = function () {
 
-    // const todoName = document.querySelector("#todoName").value;
-    // const todoDesc = document.querySelector("#todoDesc").value;
-    // const todoDueDate = document.querySelector("#todoDueDate").value;
-    // const todoPriority = document.querySelector("#todoPriority").value;
+    const todoDialogForm = document.querySelector("#todoDialogForm");
+    todoDialogForm.addEventListener("submit", () => {
+        const todoName = todoDialogForm.todoName.value;
+        const todoDesc = todoDialogForm.todoDescription.value;
+        const todoDueDate = todoDialogForm.todoDueDate.value;
+        const todoPriority = todoDialogForm.todoPriority.value;  
+        createToDo(getProjectName, todoName, todoDesc, todoDueDate, todoPriority);
+    });
 
-    const name = "test name";
-    const description = "test description";
-    const dueDate = "12.12.2022";
-    const priority = "Low";
-
-    return { name, description, dueDate, priority }; 
-}
+    const projectDialogForm = document.querySelector("#projectDialogForm");
+    projectDialogForm.addEventListener("submit", () => {
+        const oldAddProjectButton = document.querySelector(".addProjectButton");
+        oldAddProjectButton.remove();
+        const projectName = projectDialogForm.projectName.value;
+        addNewProject(projectName);
+        addProjectButtonFunk();
+    });
+}();
 
 const start = function() {
-    //form.addEventListener("submit", getUserInput);
+    const innitAddToDoButton = document.querySelector(".addToDoButton");
+    innitAddToDoButton.addEventListener("click", addDialogAddTodo);
+    
+    const initAddProjectButton = document.querySelector(".addProjectButton");
+    initAddProjectButton.addEventListener("click", addDialogAddProject);
 }();
+
+
 
 
 

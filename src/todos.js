@@ -1,6 +1,4 @@
-import { currentArray, getUserInput } from "./index.js";
-
-const userInputFunk = getUserInput();
+import { currentArray } from "./index.js";
 
 function todo(title = "", description = "", dueDate = "", priority = "Low") {
     return { title, description, dueDate, priority };
@@ -41,18 +39,16 @@ function createDOMTodos(currentTodo, project, currentArrayDOM) {
     currentArrayDOM.appendChild(todoBlock);
 }
 
-export function createToDo(project) {
-    currentArray[project].push(todo(userInputFunk.name, 
-                                                userInputFunk.description,
-                                                userInputFunk.dueDate,
-                                                userInputFunk.priority
-    ));
+export function createToDo(project, todoName, todoDesc, todoDueDate, todoPriority) {
+    currentArray[project].push(todo(todoName,
+                                    todoDesc,
+                                    todoDueDate,
+                                    todoPriority ));
     updateToDoArrays(project);
 }
 
 function updateToDoArrays(project) {
     const currentArrayDOM = document.querySelector(`#${project}`);
-    console.log(currentArrayDOM);
     currentArrayDOM.textContent = "";
 
     const projectTitle = document.createElement("h1");
@@ -69,7 +65,6 @@ function updateToDoArrays(project) {
 
 function removeTodo(project, todoBlock) {
     const blockIndex = currentArray[project].indexOf(todoBlock);
-
     currentArray[project].splice(blockIndex, 1);
     updateToDoArrays(project);
 }
@@ -79,4 +74,13 @@ export function addToDoButtonFunk(currentArrayDOM) {
     addToDoButton.textContent = "+";
     addToDoButton.classList.add("addToDoButton");
     currentArrayDOM.appendChild(addToDoButton);
+    addToDoButton.addEventListener("click", addDialogAddTodo);
 }
+
+export function addDialogAddTodo(e) {
+    const todoDialog = document.querySelector("#todoDialog");
+    getProjectName = e.target.parentElement.id;
+    todoDialog.showModal();
+}
+
+export let getProjectName;

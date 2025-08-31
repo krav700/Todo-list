@@ -1,7 +1,5 @@
-import { currentArray, getUserInput } from "./index.js";
+import { currentArray } from "./index.js";
 import { addToDoButtonFunk } from "./todos.js";
-
-const userInputFunk = getUserInput();
 
 export function addNewProject(name) {
     currentArray[name] = [];
@@ -30,3 +28,18 @@ export function updateArray() {
     });
 }
 
+export function addProjectButtonFunk() {
+    const projects = document.querySelector("#projects");
+    addProjectButton = document.createElement("button");
+    addProjectButton.textContent = "+";
+    addProjectButton.classList.add("addProjectButton");
+    projects.appendChild(addProjectButton);
+    addProjectButton.addEventListener("click", addDialogAddProject);
+}
+
+export let addProjectButton;
+
+export function addDialogAddProject() {
+    const projectDialog = document.querySelector("#projectDialog");
+    projectDialog.showModal();
+}
