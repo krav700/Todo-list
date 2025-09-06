@@ -1,4 +1,4 @@
-import { currentArray } from "./index.js";
+import { currentArray, deleteEmptyProjects } from "./index.js";
 
 function todo(title = "", description = "", dueDate = "", priority = "Low") {
     return { title, description, dueDate, priority };
@@ -49,6 +49,8 @@ function removeTodo(project, currentTodo) {
       
       if (blockIndex !== -1) {
         currentArray[project].splice(blockIndex, 1);
+        console.log("snapshot", JSON.stringify(currentArray, null, 2));
+        console.log(localStorage.getItem("lSCurrentArray"));
       }
 
     updateToDoArrays(project);
@@ -70,11 +72,19 @@ function updateToDoArrays(project) {
     projectTitle.textContent = project;
 
     currentArrayDOM.appendChild(projectTitle);
-    currentArray[project].forEach(todo => {
-        createDOMTodos(todo, project, currentArrayDOM);
-    });
+    
+    if (currentArray[project] !== undefined) {
+        currentArray[project].forEach(todo => {
+            createDOMTodos(todo, project, currentArrayDOM);
+        });
+    }
 
     addToDoButtonFunk(currentArrayDOM);
+    localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+    console.log(localStorage.getItem("lSCurrentArray"));
+    deleteEmptyProjects();
+    console.log(localStorage.getItem("lSCurrentArray"));
+
 }
 
 export function addToDoButtonFunk(currentArrayDOM) {

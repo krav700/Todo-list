@@ -1,5 +1,5 @@
 import "./styles.css"
-import { format } from "date-fns";
+import { format, getUnixTime } from "date-fns";
 import { createToDo, addDialogAddTodo, getProjectName, createDOMTodos, addToDoButtonFunk } from "./todos.js";
 import { addNewProject, addDialogAddProject, addProjectButtonFunk, addProjectButton } from "./projects.js";
 
@@ -78,16 +78,15 @@ if (parsedArray) {
     addProjectButtonFunk();
 }
 
-window.addEventListener("beforeunload", () => {
+window.addEventListener("beforeunload", deleteEmptyProjects);
+
+export function deleteEmptyProjects() {
     Object.keys(currentArray).forEach(project => {
         if (currentArray[project].length == 0) {
             delete currentArray[project];
         }
     });
-    if (Object.keys(parsedArray).length > Object.keys(currentArray).length) {
-        localStorage.setItem("lSCurrentArray", JSON.stringify(parsedArray));    
-    }
-    else {
-        localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
-    }
-});
+    localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+}
+
+console.log("snapshot", JSON.stringify(currentArray, null, 2));
