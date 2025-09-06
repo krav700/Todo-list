@@ -1,8 +1,10 @@
 import { currentArray } from "./index.js";
 import { addToDoButtonFunk } from "./todos.js";
 
-export function addNewProject(name) {
-    currentArray[name] = [];
+export function addNewProject(projectArray ,name) {
+    if (!projectArray[name]) {
+        projectArray[name] = [];
+    }
     createDomProject(name);
 }
 

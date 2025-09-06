@@ -55,6 +55,88 @@ html, body {
     font-family: "Varela Round", sans-serif;
 }
 
+dialog {
+    position: relative;
+    margin: auto;
+
+    border-radius: 10px;
+    background-color: blue;
+    border: 4px solid black;
+    color: #FFF;
+    font-weight: bold;
+}
+
+::backdrop {
+    background: linear-gradient(gray 40% , black);
+    opacity: 0.75;
+}
+
+input, textarea, select {
+    display: block;
+    resize: none;
+}
+
+
+/* todo */
+
+.todoBlock {
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    width: fit-content;
+}
+
+.todoTextBlock {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.todoRightSideBlock {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    width: 105px;
+}
+
+.removeToDoButton {
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+    border-radius: 150px;
+    background: none;
+    border: 0;
+    color: red;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: -10px;
+}
+
+.priority-High {
+    border-left: 3px solid red;
+    border-bottom: 2px solid red;
+    border-bottom-left-radius: 30px;
+}
+
+.priority-Mid {
+    border-left: 3px solid orange;
+    border-bottom: 2px solid orange;
+    border-bottom-left-radius: 30px;
+}
+
+.priority-Low {
+    border-left: 3px solid greenyellow;
+    border-bottom: 2px solid greenyellow;
+    border-bottom-left-radius: 30px;
+}
+
+.addToDoButton {
+    
+}
+
+/* projects */
+
 #pageTitle {
     margin-left: auto;
     margin-right: auto;
@@ -76,40 +158,31 @@ html, body {
     border-bottom: 1px solid black;
 }
 
-.todoBlock {
-    display: flex;
-    padding: 1rem;
-}
-
-.priority-High {
-    background-color: red;
-}
-
-.priority-Mid {
-    background-color: yellow;
-}
-
-.priority-Low {
-    background-color: greenyellow;
-}
-
 #projects {
     display: flex;
-    gap: 1rem;
     padding: 1rem;
+    flex-wrap: wrap;
 }
 
-#default {
-    background-color: gray;
+#default, .projectBlock {
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    border-bottom-left-radius: 30px;
 }
 
 .projectBlock {
-    height: 500px;
-    width: 300px;
+    height: fit-content;
+    width: fit-content;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-top: 1rem;
+}
+
+.addProjectButton {
+    margin-top: 5rem;
+    margin-left: 1rem;
 }
 
 .addToDoButton, .addProjectButton {
@@ -119,28 +192,6 @@ html, body {
     border-radius: 150px;
 }
 
-.addProjectButton {
-    margin-top: 5rem;
-    margin-left: 1rem;
-}
-
-dialog {
-    position: relative;
-    margin: auto;
-
-    border-radius: 10px;
-    background-color: blue;
-    border: 4px solid black;
-    color: #FFF;
-    font-weight: bold;
-}
-
-::backdrop {
-    background: linear-gradient(gray 40% , black);
-    opacity: 0.75;
-}
-
-input, textarea, select {
-    display: block;
-    resize: none;
+.projectBlock > h1 {
+    font-weight: 150;
 }

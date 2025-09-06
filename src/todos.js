@@ -4,7 +4,7 @@ function todo(title = "", description = "", dueDate = "", priority = "Low") {
     return { title, description, dueDate, priority };
 }
 
-function createDOMTodos(currentTodo, project, currentArrayDOM) {
+export function createDOMTodos(currentTodo, project, currentArrayDOM) {
     
     const todoBlock = document.createElement("div");
     const title = document.createElement("h2");
@@ -18,25 +18,40 @@ function createDOMTodos(currentTodo, project, currentArrayDOM) {
     description.textContent = currentTodo.description;
     dueDate.textContent = currentTodo.dueDate;
     xRemoveTodo.textContent = "X";
+    xRemoveTodo.classList.add("removeToDoButton");
 
-    todoBlock.classList.add(`priority-${currentTodo.priority}`);
-    todoBlock.classList.add("todoBlock");
+    todoBlock.classList.add(`priority-${currentTodo.priority}`, "todoBlock");
 
     const textBlock = document.createElement("div");
     textBlock.classList.add("todoTextBlock");
-    textBlock.appendChild(title);
-    textBlock.appendChild(description);
+    textBlock.append(title, description);
+
+    const rightSideBlock = document.createElement("div");
+    rightSideBlock.classList.add("todoRightSideBlock");
+    rightSideBlock.append(xRemoveTodo, dueDate);
+
+    todoBlock.append(completedTodo, textBlock ,rightSideBlock);
 
     xRemoveTodo.addEventListener("click", () => {
-        removeTodo(project, todoBlock)
+        removeTodo(project, currentTodo);
     });
 
-    todoBlock.appendChild(completedTodo);
-    todoBlock.appendChild(textBlock);
-    todoBlock.appendChild(dueDate);
-    todoBlock.appendChild(xRemoveTodo);
-
     currentArrayDOM.appendChild(todoBlock);
+}
+
+function removeTodo(project, currentTodo) {
+    const blockIndex = currentArray[project].findIndex(todo =>
+        todo.title === currentTodo.title &&
+        todo.description === currentTodo.description &&
+        todo.dueDate === currentTodo.dueDate &&
+        todo.priority === currentTodo.priority
+      );
+      
+      if (blockIndex !== -1) {
+        currentArray[project].splice(blockIndex, 1);
+      }
+
+    updateToDoArrays(project);
 }
 
 export function createToDo(project, todoName, todoDesc, todoDueDate, todoPriority) {
@@ -55,7 +70,6 @@ function updateToDoArrays(project) {
     projectTitle.textContent = project;
 
     currentArrayDOM.appendChild(projectTitle);
-
     currentArray[project].forEach(todo => {
         createDOMTodos(todo, project, currentArrayDOM);
     });
@@ -63,13 +77,8 @@ function updateToDoArrays(project) {
     addToDoButtonFunk(currentArrayDOM);
 }
 
-function removeTodo(project, todoBlock) {
-    const blockIndex = currentArray[project].indexOf(todoBlock);
-    currentArray[project].splice(blockIndex, 1);
-    updateToDoArrays(project);
-}
-
 export function addToDoButtonFunk(currentArrayDOM) {
+
     const addToDoButton = document.createElement("button");
     addToDoButton.textContent = "+";
     addToDoButton.classList.add("addToDoButton");
