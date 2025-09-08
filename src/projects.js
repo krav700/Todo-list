@@ -1,4 +1,4 @@
-import { currentArray } from "./index.js";
+import { currentArray, updatePage, addDefaultProject } from "./index.js";
 import { addToDoButtonFunk } from "./todos.js";
 
 export function addNewProject(projectArray ,name) {
@@ -12,16 +12,39 @@ function createDomProject(projectName) {
     const allProjects = document.querySelector("#projects");
 
     const projectDiv = document.createElement("div");
-
-    const projectTitle = document.createElement("h1");
-    projectTitle.textContent = projectName;
-
     projectDiv.classList.add("projectBlock");
     projectDiv.id = projectName;
 
-    projectDiv.appendChild(projectTitle);
+    
+    const projectTitle = document.createElement("h1");
+    projectTitle.textContent = projectName;
+
+    if (projectName != "default") {
+        const xRemoveProject = document.createElement("button");
+        xRemoveProject.textContent = "X";
+        xRemoveProject.classList.add("removeProjectButton");
+        xRemoveProject.addEventListener("click", () => {
+            removeProject(projectName);
+        });
+        projectDiv.append(xRemoveProject, projectTitle);
+    }
+    else {
+        projectDiv.append(projectTitle);
+    }
+
     allProjects.appendChild(projectDiv);
     addToDoButtonFunk(projectDiv);
+}
+
+export function removeProject(project) {
+    if (project != "default") {
+        delete currentArray[project];
+    }
+    const allProjects = document.querySelector("#projects");
+    allProjects.textContent = "";
+    addDefaultProject(allProjects);
+
+    updatePage(currentArray);
 }
 
 export function updateArray() {
@@ -43,5 +66,8 @@ export let addProjectButton;
 
 export function addDialogAddProject() {
     const projectDialog = document.querySelector("#projectDialog");
+
+    let scrollY = window.scrollY;
     projectDialog.showModal();
+    window.scrollTo(0, scrollY);
 }

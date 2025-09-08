@@ -1,4 +1,5 @@
 import { currentArray, deleteEmptyProjects } from "./index.js";
+import { removeProject } from "./projects.js";
 
 function todo(title = "", description = "", dueDate = "", priority = "Low") {
     return { title, description, dueDate, priority };
@@ -7,30 +8,31 @@ function todo(title = "", description = "", dueDate = "", priority = "Low") {
 export function createDOMTodos(currentTodo, project, currentArrayDOM) {
     
     const todoBlock = document.createElement("div");
+
     const title = document.createElement("h2");
+    title.textContent = currentTodo.title;
+
     const description = document.createElement("p");
+    description.textContent = currentTodo.description;
+
     const dueDate = document.createElement("h3");
-    const xRemoveTodo = document.createElement("button");
+    dueDate.textContent = currentTodo.dueDate;
+    
     const completedTodo = document.createElement("input");
     completedTodo.type = "checkbox";
 
-    title.textContent = currentTodo.title;
-    description.textContent = currentTodo.description;
-    dueDate.textContent = currentTodo.dueDate;
+
+    const xRemoveTodo = document.createElement("button");
     xRemoveTodo.textContent = "X";
     xRemoveTodo.classList.add("removeToDoButton");
 
     todoBlock.classList.add(`priority-${currentTodo.priority}`, "todoBlock");
 
-    const textBlock = document.createElement("div");
-    textBlock.classList.add("todoTextBlock");
-    textBlock.append(title, description);
+    const shownProperties = document.createElement("div");
+    shownProperties.classList.add("shownProperties");
+    shownProperties.append(completedTodo, title, dueDate);
 
-    const rightSideBlock = document.createElement("div");
-    rightSideBlock.classList.add("todoRightSideBlock");
-    rightSideBlock.append(xRemoveTodo, dueDate);
-
-    todoBlock.append(completedTodo, textBlock ,rightSideBlock);
+    todoBlock.append(xRemoveTodo, shownProperties, description);
 
     xRemoveTodo.addEventListener("click", () => {
         removeTodo(project, currentTodo);
@@ -49,8 +51,6 @@ function removeTodo(project, currentTodo) {
       
       if (blockIndex !== -1) {
         currentArray[project].splice(blockIndex, 1);
-        console.log("snapshot", JSON.stringify(currentArray, null, 2));
-        console.log(localStorage.getItem("lSCurrentArray"));
       }
 
     updateToDoArrays(project);
@@ -71,7 +71,21 @@ function updateToDoArrays(project) {
     const projectTitle = document.createElement("h1");
     projectTitle.textContent = project;
 
-    currentArrayDOM.appendChild(projectTitle);
+    if (project != "default") {
+        const xRemoveProject = document.createElement("button");
+        xRemoveProject.textContent = "X";
+        xRemoveProject.classList.add("removeProjectButton");
+        xRemoveProject.addEventListener("click", () => {
+            removeProject(projectName);
+        });
+
+        currentArrayDOM.append(xRemoveProject, projectTitle);
+    }
+    else {
+        currentArrayDOM.append(projectTitle);
+    }
+
+
     
     if (currentArray[project] !== undefined) {
         currentArray[project].forEach(todo => {
@@ -79,18 +93,15 @@ function updateToDoArrays(project) {
         });
     }
 
-    addToDoButtonFunk(currentArrayDOM);
     localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
-    console.log(localStorage.getItem("lSCurrentArray"));
     deleteEmptyProjects();
-    console.log(localStorage.getItem("lSCurrentArray"));
+    addToDoButtonFunk(currentArrayDOM);
 
 }
 
 export function addToDoButtonFunk(currentArrayDOM) {
 
     const addToDoButton = document.createElement("button");
-    addToDoButton.textContent = "+";
     addToDoButton.classList.add("addToDoButton");
     currentArrayDOM.appendChild(addToDoButton);
     addToDoButton.addEventListener("click", addDialogAddTodo);
@@ -99,7 +110,10 @@ export function addToDoButtonFunk(currentArrayDOM) {
 export function addDialogAddTodo(e) {
     const todoDialog = document.querySelector("#todoDialog");
     getProjectName = e.target.parentElement.id;
+    let scrollY = window.scrollY;
     todoDialog.showModal();
+    
+    window.scrollTo(0, scrollY);
 }
 
 export let getProjectName;
