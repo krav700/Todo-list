@@ -21,6 +21,9 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
 
     const completedTodo = document.createElement("input");
     completedTodo.type = "checkbox";
+    if (currentTodo.completed) {
+        completedTodo.checked = true;
+    }
 
     checkboxChecked(project, completedTodo, title, description, currentTodo, todoBlock);
 
@@ -64,9 +67,6 @@ function checkboxChecked(project, completedTodo, title, description, currentTodo
       );
       
       if (blockIndex !== -1) {
-        if (currentArray[project][blockIndex].completed) {
-            completedTodo.checked = true;
-        }
 
         if (completedTodo.checked) {
             title.style.textDecoration = "line-through";
@@ -84,6 +84,7 @@ function checkboxChecked(project, completedTodo, title, description, currentTodo
             localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
         }
         else {
+            title.classList.remove("stike");
             title.style.textDecoration = "none";
             description.style.textDecoration = "none";
             todoBlock.style.background = "#FFF";
