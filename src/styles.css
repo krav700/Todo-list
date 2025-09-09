@@ -93,12 +93,27 @@ input, textarea, select {
 
 /* todo */
 
+.description {
+    opacity: 0;
+    max-height: 0;
+}
+
+.description.visible {
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+    max-height: fit-content;
+}
+
 .todoBlock {
     display: flex;
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;
     width: fit-content;
+}
+
+.todoBlock:hover {
+    transition: all 2s ease-out;
 }
 
 .shownProperties {
@@ -109,6 +124,7 @@ input, textarea, select {
 
 input[type="checkbox"] {
     margin: auto;
+    flex-basis: 20px;
 }
 
 h2 {

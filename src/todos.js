@@ -1,12 +1,12 @@
 import { currentArray, deleteEmptyProjects } from "./index.js";
 import { removeProject } from "./projects.js";
 
-function todo(title = "", description = "", dueDate = "", priority = "Low") {
-    return { title, description, dueDate, priority };
+function todo(title = "", description = "", dueDate = "", priority = "Low", completed = false) {
+    return { title, description, dueDate, priority, completed };
 }
 
 export function createDOMTodos(currentTodo, project, currentArrayDOM) {
-    
+
     const todoBlock = document.createElement("div");
 
     const title = document.createElement("h2");
@@ -14,13 +14,19 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
 
     const description = document.createElement("p");
     description.textContent = currentTodo.description;
+    description.classList.add("description");
 
     const dueDate = document.createElement("h3");
     dueDate.textContent = currentTodo.dueDate;
-    
+
     const completedTodo = document.createElement("input");
     completedTodo.type = "checkbox";
 
+    checkboxChecked(project, completedTodo, title, description, currentTodo, todoBlock);
+
+    completedTodo.addEventListener("change", () => {
+        checkboxChecked(project, completedTodo, title, description, currentTodo, todoBlock);
+    });
 
     const xRemoveTodo = document.createElement("button");
     xRemoveTodo.textContent = "X";
@@ -38,7 +44,55 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
         removeTodo(project, currentTodo);
     });
 
+    todoBlock.addEventListener("mouseover", () => {
+        description.classList.add("visible");
+    });
+    todoBlock.addEventListener("mouseleave", () => {
+        description.classList.remove("visible");
+    });
+
     currentArrayDOM.appendChild(todoBlock);
+}
+
+function checkboxChecked(project, completedTodo, title, description, currentTodo, todoBlock) {
+
+    const blockIndex = currentArray[project].findIndex(todo =>
+        todo.title === currentTodo.title &&
+        todo.description === currentTodo.description &&
+        todo.dueDate === currentTodo.dueDate &&
+        todo.priority === currentTodo.priority
+      );
+      
+      if (blockIndex !== -1) {
+        if (currentArray[project][blockIndex].completed) {
+            completedTodo.checked = true;
+        }
+
+        if (completedTodo.checked) {
+            title.style.textDecoration = "line-through";
+            description.style.textDecoration = "line-through";
+            if (currentTodo.priority == "High") {
+                todoBlock.style.background = `rgb(255 0 0 / 0.6)`;
+            }
+            else if (currentTodo.priority == "Mid") {
+                todoBlock.style.background = `rgb(255 165 0 / 0.6)`;
+            }
+            else if (currentTodo.priority == "Low") {
+                todoBlock.style.background = `rgb(173 255 47 / 0.6)`;
+            }
+            currentArray[project][blockIndex].completed = true;
+            localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+        }
+        else {
+            title.style.textDecoration = "none";
+            description.style.textDecoration = "none";
+            todoBlock.style.background = "#FFF";
+            currentArray[project][blockIndex].completed = false;
+            localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+        }
+
+
+      }
 }
 
 function removeTodo(project, currentTodo) {
@@ -56,11 +110,12 @@ function removeTodo(project, currentTodo) {
     updateToDoArrays(project);
 }
 
-export function createToDo(project, todoName, todoDesc, todoDueDate, todoPriority) {
+export function createToDo(project, todoName, todoDesc, todoDueDate, todoPriority, todoCompleted) {
     currentArray[project].push(todo(todoName,
                                     todoDesc,
                                     todoDueDate,
-                                    todoPriority ));
+                                    todoPriority,
+                                    todoCompleted ));
     updateToDoArrays(project);
 }
 

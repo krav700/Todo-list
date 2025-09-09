@@ -1,17 +1,17 @@
 import "./styles.css"
-import { format, startOfToday } from "date-fns";
+import { format, parse, startOfToday } from "date-fns";
 import { createToDo, addDialogAddTodo, getProjectName, createDOMTodos, addToDoButtonFunk } from "./todos.js";
 import { addNewProject, addDialogAddProject, addProjectButtonFunk } from "./projects.js";
-
-window.createToDo = createToDo;
-window.addNewProject = addNewProject;
 
 export let currentArray = {
     default: [],
 };
 
 if (localStorage.getItem("lSCurrentArray") != "{}") {
-    currentArray = Object.assign({}, JSON.parse(localStorage.getItem("lSCurrentArray")));
+    currentArray = Object.assign({}, JSON.parse(localStorage.getItem("lSCurrentArray")));    
+    if (!currentArray["default"]) {
+        currentArray["default"] = [];
+    }
 }   
 
 
@@ -28,7 +28,7 @@ const getUserInput = function () {
             const yearMonthDay = datePicked.split("-");
             todoDueDate = format(new Date(yearMonthDay[0], yearMonthDay[1] - 1, yearMonthDay[2]), "E, MMM dd");
         }
-        createToDo(getProjectName, todoName, todoDesc, todoDueDate, todoPriority);
+        createToDo(getProjectName, todoName, todoDesc, todoDueDate, todoPriority, false);
     });
 
 
@@ -57,12 +57,12 @@ if (parsedArray) {
 }
 
 export function updatePage(neededArray) {
+
     Object.keys(neededArray).forEach(project => {
         if (neededArray[project].length == 0) {
             delete neededArray[project];
         }
         else {
-            
             if (project != "default") {
                 addNewProject(neededArray, project);
             }
@@ -70,7 +70,6 @@ export function updatePage(neededArray) {
             for (let i = 0; i < neededArray[project].length; i++) {
                 createDOMTodos(neededArray[project][i], project, currentArrayDOM);
             }
-
             addToDoButtonFunk(currentArrayDOM);
 
             const innitAddTodoButton = document.querySelector(`#${project} .addToDoButton`);
