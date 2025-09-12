@@ -93,9 +93,49 @@ input, textarea, select {
 
 /* todo */
 
+
+h2 {
+    font-size: 1.5rem;
+    position: relative;
+    min-width: 5ch;
+
+    max-width: 25ch;
+    text-align: left;
+
+    margin-left: 1rem;
+    margin-right: 5rem;
+}
+
+.title-input {
+    font-family: "Varela Round", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 25ch;
+    margin-left: 1rem;
+    margin-right: 5rem;
+    top: -1rem;    
+}
+
+.edit-input {
+    position: relative;
+}
+
 .description {
+    position: relative;
     opacity: 0;
     max-height: 0;
+}
+
+.description-input {
+    font-family: "Varela Round", sans-serif;
+    font-size: 1rem;
+    width: 45ch;
+    margin-left: 1rem;
+    margin-right: 5rem;
+    top: -1rem;  
+
+    width: 45ch;
+    margin-left: 1.5rem;
 }
 
 .description.visible {
@@ -104,8 +144,19 @@ input, textarea, select {
     max-height: fit-content;
 }
 
+.dueDate-input {
+    font-family: "Varela Round", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    margin-left: 1rem;
+    margin-right: 5rem;
+    top: -1rem;   
+}
+
 .todoBlock {
     display: flex;
+    position: relative;
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;
@@ -164,12 +215,6 @@ input[type="checkbox"]:focus {
 input[type="checkbox"]:disabled {
     color: #959495;
     cursor: not-allowed;
-}
-
-h2 {
-    max-width: 25ch;
-    margin-left: 1rem;
-    margin-right: 5rem;
 }
 
 p {

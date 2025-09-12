@@ -1,5 +1,6 @@
 import { currentArray, deleteEmptyProjects } from "./index.js";
 import { removeProject } from "./projects.js";
+import { format } from "date-fns";
 
 function todo(title = "", description = "", dueDate = "", priority = "Low", completed = false) {
     return { title, description, dueDate, priority, completed };
@@ -9,15 +10,30 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
 
     const todoBlock = document.createElement("div");
 
+    const titleDiv = document.createElement("div");
+    titleDiv.classList.add("edit-input");
+
     const title = document.createElement("h2");
     title.textContent = currentTodo.title;
+
+    titleDiv.appendChild(title);
+
+    const descriptionDiv = document.createElement("div");
+    descriptionDiv.classList.add("edit-input");
 
     const description = document.createElement("p");
     description.textContent = currentTodo.description;
     description.classList.add("description");
 
+    descriptionDiv.appendChild(description);
+
+    const dueDateDiv = document.createElement("div");
+    dueDateDiv.classList.add("edit-input");
+
     const dueDate = document.createElement("h3");
     dueDate.textContent = currentTodo.dueDate;
+
+    dueDateDiv.appendChild(dueDate);
 
     const completedTodo = document.createElement("input");
     completedTodo.type = "checkbox";
@@ -39,9 +55,113 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
 
     const shownProperties = document.createElement("div");
     shownProperties.classList.add("shownProperties");
-    shownProperties.append(completedTodo, title, dueDate);
+    shownProperties.append(completedTodo, titleDiv, dueDateDiv);
 
-    todoBlock.append(xRemoveTodo, shownProperties, description);
+    todoBlock.append(xRemoveTodo, shownProperties, descriptionDiv);
+
+    title.addEventListener("click", () => {
+        const titleInput = document.createElement("input");
+        titleInput.classList.add("title-input");
+        titleInput.value = title.textContent;
+        title.textContent = "";
+
+        titleDiv.appendChild(titleInput);
+        shownProperties.removeChild(titleDiv);
+        shownProperties.removeChild(dueDateDiv);
+        shownProperties.appendChild(titleDiv);
+        shownProperties.appendChild(dueDateDiv);
+
+        titleInput.focus();
+        titleInput.addEventListener("blur", () => {
+            title.textContent = titleInput.value;
+            titleDiv.removeChild(titleInput);
+            
+            const blockIndex = currentArray[project].findIndex(todo =>
+                todo.title === currentTodo.title &&
+                todo.description === currentTodo.description &&
+                todo.dueDate === currentTodo.dueDate &&
+                todo.priority === currentTodo.priority
+              );
+              
+              if (blockIndex !== -1) {
+                currentArray[project][blockIndex].title = title.textContent;
+                localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+              }
+            
+        });
+    });
+
+    description.addEventListener("click", () => {
+        const descriptionInput = document.createElement("input");
+        descriptionInput.classList.add("description-input");
+        descriptionInput.value = description.textContent;
+        description.textContent = "";
+
+        descriptionDiv.appendChild(descriptionInput);
+        todoBlock.removeChild(descriptionDiv);
+        todoBlock.appendChild(descriptionDiv);
+
+        descriptionInput.focus();
+        descriptionInput.addEventListener("blur", () => {
+            description.textContent = descriptionInput.value;
+            descriptionDiv.removeChild(descriptionInput);
+            
+            const blockIndex = currentArray[project].findIndex(todo =>
+                todo.title === currentTodo.title &&
+                todo.description === currentTodo.description &&
+                todo.dueDate === currentTodo.dueDate &&
+                todo.priority === currentTodo.priority
+              );
+              
+              if (blockIndex !== -1) {
+                currentArray[project][blockIndex].description = description.textContent;
+                localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+              }
+            
+        });
+    });
+
+    dueDate.addEventListener("click", () => {
+        const dueDateInput = document.createElement("input");
+        dueDateInput.type = "date";
+        dueDateInput.classList.add("dueDate-input");
+        dueDateInput.value = description.textContent;
+        dueDate.textContent = "";
+
+        dueDateDiv.appendChild(dueDateInput);
+        shownProperties.removeChild(dueDateDiv);
+        shownProperties.appendChild(dueDateDiv);
+
+        dueDateInput.focus();
+        dueDateInput.addEventListener("blur", () => {
+
+            const datePicked = dueDateInput.value;
+
+            let todoDueDate = format(new Date(), "E, MMM dd");
+            if (datePicked != "") {
+                const yearMonthDay = datePicked.split("-");
+                todoDueDate = format(new Date(yearMonthDay[0], yearMonthDay[1] - 1, yearMonthDay[2]), "E, MMM dd");
+            }
+
+            dueDate.textContent = todoDueDate;
+            dueDateDiv.removeChild(dueDateInput);
+            
+            const blockIndex = currentArray[project].findIndex(todo =>
+                todo.title === currentTodo.title &&
+                todo.description === currentTodo.description &&
+                todo.dueDate === currentTodo.dueDate &&
+                todo.priority === currentTodo.priority
+              );
+              
+              if (blockIndex !== -1) {
+                currentArray[project][blockIndex].dueDate = dueDate.textContent;
+                localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
+              }
+            
+        });
+    });
+
+
 
     xRemoveTodo.addEventListener("click", () => {
         removeTodo(project, currentTodo);

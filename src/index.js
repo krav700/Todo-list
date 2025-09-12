@@ -1,5 +1,5 @@
 import "./styles.css"
-import { format, parse, startOfToday } from "date-fns";
+import { format } from "date-fns";
 import { createToDo, addDialogAddTodo, getProjectName, createDOMTodos, addToDoButtonFunk } from "./todos.js";
 import { addNewProject, addDialogAddProject, addProjectButtonFunk } from "./projects.js";
 
