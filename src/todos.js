@@ -161,6 +161,22 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
         });
     });
 
+    todoBlock.addEventListener("dblclick", () => {
+        if (todoBlock.classList.contains('priority-Low')) {
+            todoBlock.classList.remove('priority-Low');
+            todoBlock.classList.add('priority-Mid');
+        }
+        else if (todoBlock.classList.contains('priority-Mid')) {
+            todoBlock.classList.remove('priority-Mid');
+            todoBlock.classList.add('priority-High');
+        }
+        else if (todoBlock.classList.contains('priority-High')) {
+            todoBlock.classList.remove('priority-High');
+            todoBlock.classList.add('priority-Low');
+        }
+
+    });
+
 
 
     xRemoveTodo.addEventListener("click", () => {
@@ -192,22 +208,20 @@ function checkboxChecked(project, completedTodo, title, description, currentTodo
             title.style.textDecoration = "line-through";
             description.style.textDecoration = "line-through";
             if (currentTodo.priority == "High") {
-                todoBlock.style.background = `rgb(255 0 0 / 0.6)`;
+                todoBlock.classList.add("priority-High");
             }
             else if (currentTodo.priority == "Mid") {
-                todoBlock.style.background = `rgb(255 165 0 / 0.6)`;
+                todoBlock.classList.add("priority-Mid");
             }
             else if (currentTodo.priority == "Low") {
-                todoBlock.style.background = `rgb(173 255 47 / 0.6)`;
+                todoBlock.classList.add("priority-Low");
             }
             currentArray[project][blockIndex].completed = true;
             localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
         }
         else {
-            title.classList.remove("stike");
             title.style.textDecoration = "none";
             description.style.textDecoration = "none";
-            todoBlock.style.background = "#FFF";
             currentArray[project][blockIndex].completed = false;
             localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
         }
