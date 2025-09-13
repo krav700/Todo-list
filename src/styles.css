@@ -243,6 +243,9 @@ h3 {
     border-left: 3px solid red;
     border-bottom: 2px solid red;
     border-bottom-left-radius: 30px;
+}
+
+.priority-HighBG {
     background: rgb(255 0 0 / 0.6);
 }
 
@@ -250,6 +253,9 @@ h3 {
     border-left: 3px solid orange;
     border-bottom: 2px solid orange;
     border-bottom-left-radius: 30px;
+}
+
+.priority-MidBG {
     background: rgb(255 165 0 / 0.6);
 }
 
@@ -257,6 +263,9 @@ h3 {
     border-left: 3px solid greenyellow;
     border-bottom: 2px solid greenyellow;
     border-bottom-left-radius: 30px;
+}
+
+.priority-LowBG {
     background: rgb(173 255 47 / 0.6);
 }
 

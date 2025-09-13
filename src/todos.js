@@ -162,19 +162,36 @@ export function createDOMTodos(currentTodo, project, currentArrayDOM) {
     });
 
     todoBlock.addEventListener("dblclick", () => {
-        if (todoBlock.classList.contains('priority-Low')) {
-            todoBlock.classList.remove('priority-Low');
-            todoBlock.classList.add('priority-Mid');
-        }
-        else if (todoBlock.classList.contains('priority-Mid')) {
-            todoBlock.classList.remove('priority-Mid');
-            todoBlock.classList.add('priority-High');
-        }
-        else if (todoBlock.classList.contains('priority-High')) {
-            todoBlock.classList.remove('priority-High');
-            todoBlock.classList.add('priority-Low');
-        }
-
+        
+        const blockIndex = currentArray[project].findIndex(todo =>
+            todo.title === currentTodo.title &&
+            todo.description === currentTodo.description &&
+            todo.dueDate === currentTodo.dueDate &&
+            todo.priority === currentTodo.priority
+        );
+          
+        if (blockIndex !== -1) {
+    
+            if (todoBlock.classList.contains('priority-Low')) {
+                todoBlock.classList.remove('priority-Low');
+                todoBlock.classList.add('priority-Mid');
+                currentTodo.priority = "Mid";
+                currentArray[project][blockIndex].priority = "Mid";
+            }
+            else if (todoBlock.classList.contains('priority-Mid')) {
+                todoBlock.classList.remove('priority-Mid');
+                todoBlock.classList.add('priority-High');
+                currentTodo.priority = "High";
+                currentArray[project][blockIndex].priority = "High";
+            }
+            else if (todoBlock.classList.contains('priority-High')) {
+                todoBlock.classList.remove('priority-High');
+                todoBlock.classList.add('priority-Low');
+                currentTodo.priority = "Low";
+                currentArray[project][blockIndex].priority = "Low";
+            }
+        }   
+        checkboxChecked(project, completedTodo, title, description, currentTodo, todoBlock);
     });
 
 
@@ -208,13 +225,19 @@ function checkboxChecked(project, completedTodo, title, description, currentTodo
             title.style.textDecoration = "line-through";
             description.style.textDecoration = "line-through";
             if (currentTodo.priority == "High") {
-                todoBlock.classList.add("priority-High");
+                todoBlock.classList.add("priority-HighBG");
+                todoBlock.classList.remove("priority-MidBG");
+                todoBlock.classList.remove("priority-LowBG");
             }
             else if (currentTodo.priority == "Mid") {
-                todoBlock.classList.add("priority-Mid");
+                todoBlock.classList.remove("priority-HighBG");
+                todoBlock.classList.add("priority-MidBG");
+                todoBlock.classList.remove("priority-LowBG");
             }
             else if (currentTodo.priority == "Low") {
-                todoBlock.classList.add("priority-Low");
+                todoBlock.classList.remove("priority-HighBG");
+                todoBlock.classList.remove("priority-MidBG");
+                todoBlock.classList.add("priority-LowBG");
             }
             currentArray[project][blockIndex].completed = true;
             localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
@@ -222,6 +245,11 @@ function checkboxChecked(project, completedTodo, title, description, currentTodo
         else {
             title.style.textDecoration = "none";
             description.style.textDecoration = "none";
+
+            todoBlock.classList.remove("priority-HighBG");
+            todoBlock.classList.remove("priority-MidBG");
+            todoBlock.classList.remove("priority-LowBG");
+
             currentArray[project][blockIndex].completed = false;
             localStorage.setItem("lSCurrentArray", JSON.stringify(currentArray));
         }
